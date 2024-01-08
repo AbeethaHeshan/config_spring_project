@@ -1,19 +1,70 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '3.2.1'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+subprojects {
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java'
+    apply plugin: 'application'
+    apply plugin: 'jacoco'
+
+    repositories {
+        mavenCentral()
+    }
+
+    sourceCompatibility = '17'
+
+    dependencies {
+
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+        implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+        compileOnly 'org.projectlombok:lombok'
+        runtimeOnly 'com.mysql:mysql-connector-j'
+        annotationProcessor 'org.projectlombok:lombok'
+//        dependencyManagement {
+//            imports {
+//                mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+//            }
+//        }
+    }
+
+
+    test {
+        // maxHeapSize = "4044m"
+        //useJUnitPlatform()
+        // testLogging.showStandardStreams = true
+        //finalizedBy jacocoTestReport
+    }
+
 }
 
-test {
+jar{
+    enabled = true
+}
+
+bootJar{
+    enabled = false
+}
+tasks.named('test') {
     useJUnitPlatform()
 }
